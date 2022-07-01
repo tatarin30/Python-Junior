@@ -1,1 +1,58 @@
+# установили модуль Levenshtein
+# импортировали функцию distance из модуля
+
+from Levenshtein import distance
+pairs = [('кот','код'), ('гора','нора'), ('пион','питон'), ('старый','ставрополь'), ('море','гора'),]
+print ('Hello') # проверка работы конструкции _main_
+if __name__ == '_main_':
+    for a, b in pairs:
+        print(a, b, distance(a,b))
+        
+# установили модуль pymorphy2
+# импортировали функцию MorphAnalyzer из модуля
+from pymorphy2 import MorphAnalyzer
+
+def compare(S1,S2): # создали функцию compare
+    # используем метод поиска триграмм
+    ngrams = [S1[i:i+3] for i in range(len(S1))] 
+    count = 0
+    for ngram in ngrams:
+        count += S2.count(ngram)
+    return count/max(len(S1), len(S2))
+
+ma = MorphAnalyzer()
+pairs = [('кот','код'), ('гора','нора'), ('пион','питон'), ('старый','ставрополь'), ('море','гора'),]
+
+print ('Python !') # проверка работы конструкции _main_
+if __name__ == '_main_':
+    for c, d in pairs:
+        nf_c = ma.parse(c)[0].normal_form
+        nf_d = ma.parse(d)[0].normal_form
+        print(c, d, compare(nf_c, nf_d))
+
+
+# Последнее задача в задании
+def compare(S1,S2): # создали функцию compare
+    # используем метод поиска триграмм
+    ngrams = [S1[i:i+3] for i in range(len(S1))] 
+    count = 0
+    for ngram in ngrams:
+        count += S2.count(ngram)
+    return count/max(len(S1), len(S2))
+
+Strings = '''Даниил
+Данислав
+Демид
+Демьян
+Денис
+Добрыня
+Дорофей'''.split('\n')
+
+y = 'Дмитрий'
+
+print ('Hello') # проверка работы конструкции _main_
+
+if __name__ == '_main_':
+    for x in Strings:
+        print(x, y, compare(x,y))
 
