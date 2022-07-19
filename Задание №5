@@ -1,1 +1,134 @@
+# PEP – Python Enhancement Proposal, предложения по развитию Python.
+# PEP8 содержит перечень принципов написания программного кода на языке Python.
+# линтер (от lint) - это статический анализатор кода, который помогает находить
+# ошибки, делать код однообразным и более читаемым. 
+# В задаче №5 рассмотрим линтер flake8 для Python.
+# Установим flake8 через командную строку, используя pip: pip install flake8.
+# Проверим установку: flake8 --version.
+# Для проверки на стандарт PEP 8 используем файл homework_4_1.py из задачи №4.
+
+import unittest
+
+from similarity .jarowinkler import JaroWinkler
+
+from similarity .normalized_levenshtein import NormalizedLevenshtein
+
+class CompareGlobal():
+    
+    def compare(self, S1, S2):
+        raise Exception("Метод не выполнен")
+
+class CountCompare(CompareGlobal):
+
+    def compare(self, S1, S2):
+        ngrams = [S1[i:i+3] for i in range (len(S1))]
+        count  =  0
+        for ngram in ngrams:
+            count += S2.count(ngram)
+        return S2, count  / max(len(S1), len(S2))
+
+class JaroWinklerCompare(CompareGlobal):
+
+    def compare(self, S1, S2):
+        return S1, S2, JaroWinkler().similarity(S1, S2)
+
+class LevenshteinCompare(CompareGlobal):
+
+    def compare(self, S1, S2):
+        return S1, S2, NormalizedLevenshtein().distance(S1, S2)
+
+if __name__ == '__main__':
+    class TestCompare (unittest.TestCase):
+        def test_CompareByMethod1(self):
+        
+            self.assertEqual(JaroWinklerCompare.compare(self, 'море', 'гора'), ('море', 'гора', 0.6666666666666666))
+            self.assertEqual(JaroWinklerCompare.compare(self, 'компьютер', 'компьютеризация'), ('компьютер', 'компьютеризация', 0.9466666666666667))
+            self.assertEqual(LevenshteinCompare.compare(self, 'море', 'гора'), ('море', 'гора', 0.5))  
+            self.assertEqual(LevenshteinCompare.compare(self, 'компьютер', 'компьютеризация'), ('компьютер', 'компьютеризация', 0.4))                     
+    
+    unittest.main()
+
+
+# Запустим проверку файла в командной строке: flake8 C:\Users\Дмитрий\Desktop\Lesson_5\homework_4_1.py
+# Получим список ошибок:
+
+homework_4_1.py:7:1: E302 expected 2 blank lines, found 1 	    # (ожидалось 2 пустые строки, найдена 1)
+homework_4_1.py:8:1: W293 blank line contains whitespace    	  # (пустая строка содержит пробелы)
+homework_4_1.py:12:1: E302 expected 2 blank lines, found 1 	    # (ожидалось 2 пустые строки, найдена 1)
+homework_4_1.py:15:43: E211 whitespace before '(' 		          # (пробел перед знаком ( )
+homework_4_1.py:16:14: E221 multiple spaces before operator 	  # (несколько пробелов перед оператором)
+homework_4_1.py:19:25: E221 multiple spaces before operator	    # (несколько пробелов перед оператором)
+homework_4_1.py:21:1: E302 expected 2 blank lines, found 1 	    # (ожидалось 2 пустые строки, найдена 1)
+homework_4_1.py:26:1: E302 expected 2 blank lines, found 1 	    # (ожидалось 2 пустые строки, найдена 1)
+homework_4_1.py:31:1: E305 expected 2 blank lines after class or function definition, found 1   # (ожидалось 2 пустые строки после определения класса или функции, найдена 1)
+homework_4_1.py:34:1: W293 blank line contains whitespace 	    # (пустая строка содержит пробелы)
+homework_4_1.py:35:80: E501 line too long (116 > 79 characters) # (слишком длинная строка (116 > 79 символов))
+homework_4_1.py:36:80: E501 line too long (148 > 79 characters) # (слишком длинная строка (148 > 79 символов))
+homework_4_1.py:37:80: E501 line too long (101 > 79 characters) # (слишком длинная строка (101 > 79 символов))
+homework_4_1.py:38:80: E501 line too long (133 > 79 characters) # (слишком длинная строка (133 > 79 символов))
+homework_4_1.py:38:134: W291 trailing whitespace 		            # (завершающий пробел)
+homework_4_1.py:39:1: W293 blank line contains whitespace 	    # (пустая строка содержит пробелы)
+
+# Установим плагин flake8-bugbear: pip install flake8-bugbear.
+# Проверим установку: flake8 --version.
+
+# Установим плагин pep8-naming: pip install pep8-naming.
+# Проверим установку: flake8 --version.
+
+# Запустим проверку файла: homework_4_1.py
+# Получим список дополнительных ошибок:
+
+homework_4_1.py:10:24: N803 argument name 'S1' should be lowercase # (имя аргумента 'S1' должно быть в нижнем регистре)
+homework_4_1.py:16:24: N803 argument name 'S1' should be lowercase # (имя аргумента 'S1' должно быть в нижнем регистре)
+homework_4_1.py:26:24: N803 argument name 'S1' should be lowercase # (имя аргумента 'S1' должно быть в нижнем регистре)
+homework_4_1.py:32:24: N803 argument name 'S1' should be lowercase # (имя аргумента 'S1' должно быть в нижнем регистре)
+homework_4_1.py:37:14: N802 function name 'test_CompareByMethod1' should be lowercase # (имя функции должно быть в нижнем регистре)
+
+Исправим код.
+
+import unittest
+
+from similarity .jarowinkler import JaroWinkler
+
+from similarity .normalized_levenshtein import NormalizedLevenshtein
+
+
+class CompareGlobal():
+
+    def compare(self, s1, s2):
+        raise Exception("Метод не выполнен")
+
+
+class CountCompare(CompareGlobal):
+
+    def compare(self, s1, s2):
+        ngrams = [s1[i:i+3] for i in range(len(s1))]
+        count = 0
+        for ngram in ngrams:
+            count += s2.count(ngram)
+        return s2, count / max(len(s1), len(s2))
+
+
+class JaroWinklerCompare(CompareGlobal):
+
+    def compare(self, s1, s2):
+        return s1, s2, JaroWinkler().similarity(s1, s2)
+
+
+class LevenshteinCompare(CompareGlobal):
+
+    def compare(self, s1, s2):
+        return s1, s2, NormalizedLevenshtein().distance(s1, s2)
+
+
+if __name__ == '__main__':
+    class TestCompare (unittest.TestCase):
+        def test_comparebymethod1(self):
+
+            self.assertEqual(JaroWinklerCompare.compare(self, 'море', 'гора'), ('море', 'гора', 0.6666666666666666))
+            self.assertEqual(JaroWinklerCompare.compare(self, 'компьютер', 'компьютеризация'), ('компьютер', 'компьютеризация', 0.9466666666666667))
+            self.assertEqual(LevenshteinCompare.compare(self, 'море', 'гора'), ('море', 'гора', 0.5))
+            self.assertEqual(LevenshteinCompare.compare(self, 'компьютер', 'компьютеризация'), ('компьютер', 'компьютеризация', 0.4))
+
+    unittest.main()
 
